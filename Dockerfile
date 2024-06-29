@@ -6,11 +6,23 @@ ENV TZ=US/Eastern
 RUN apt-get update
 RUN apt-get upgrade -y
 
-RUN apt-get install sudo curl git nodejs npm jq apache2 wget apt-utils -y
+#RUN apt-get install -y wget 
+RUN apt-get install  sudo -y
+RUN apt-get install  curl -y
+RUN apt-get install  npm -y
+RUN apt-get install  jq -y
+RUN apt-get install  apache2 -y
+RUN apt-get install  apt-utils -y
 
-RUN curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 
-RUN git clone https://github.com/nerosketch/quakejs.git
+#RUN curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+COPY ./setup_12.x setup_12.x
+RUN sudo -E bash -
+
+COPY ./quakejs /quakejs
+
+#RUN git clone https://github.com/nerosketch/quakejs.git
+
 WORKDIR /quakejs
 RUN npm install
 RUN ls
