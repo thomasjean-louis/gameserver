@@ -1,9 +1,6 @@
 name: Deploy
 
-on:
-  push:
-    branches:
-      - main # Branch to deploy when pushed
+on: push
 
 jobs:   
   deploy:
@@ -22,4 +19,4 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: thomasjeanlouis1/gameserver:prod_0.${{ github.run_number }}
+          tags: thomasjeanlouis1/gameserver:${{ github.head_ref || github.ref_name }}_${{ github.run_number }}
