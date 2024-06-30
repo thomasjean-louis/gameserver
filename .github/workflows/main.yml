@@ -1,9 +1,6 @@
 name: Deploy
 
-on:
-  push:
-    branches:
-      - ${{ github.head_ref || github.ref_name }} # Branch to deploy when pushed
+on: push
 
 jobs:   
   deploy:
