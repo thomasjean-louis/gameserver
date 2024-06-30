@@ -4,8 +4,8 @@ cd /var/www/html
 
 #sed -i "s/'quakejs:/window.location.hostname + ':/g" index.html
 
-sed -i "s/'content_server'/':${CONTENT_SERVER}'/g" index.html
-sed -i "s/'game_server'/':${GAME_SERVER}'/g" index.html
+sed -i "s/'content_server'/'${CONTENT_SERVER}'/g" index.html
+sed -i "s/'game_server'/'${GAME_SERVER}'/g" index.html
 
 sed -i "s/':80'/':${HTTP_PORT}'/g" index.html
 
