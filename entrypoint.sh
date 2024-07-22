@@ -15,11 +15,11 @@ cd /quakejs
 
 # SSL
 make-ssl-cert generate-default-snakeoil --force-overwrite
-KEY_VALUE=$(cat /etc/ssl/private/ssl-cert-snakeoil.key)
-CERT_VALUE=$(cat /etc/ssl/certs/ssl-cert-snakeoil.pem)
-echo '{"key":"'"$KEY_VALUE"'","cert":"'"$CERT_VALUE"'"}' >> wssproxy.json
-
-node build/ioq3ded.js +set fs_game baseq3 set dedicated 1 +exec server.cfg +set fs_cdn ${CONTENT_SERVER}
+echo '{"key":"/etc/ssl/private/ssl-cert-snakeoil.key","cert":"/etc/ssl/certs/ssl-cert-snakeoil.pem"}' >> ./bin/wssproxy.json
 
 node bin/wssproxy.js --config ./wssproxy.json
+
+# node build/ioq3ded.js +set fs_game baseq3 set dedicated 1 +exec server.cfg +set fs_cdn ${CONTENT_SERVER}
+
+
 

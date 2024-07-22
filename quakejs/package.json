@@ -6,15 +6,13 @@
     "quakejs-master": "bin/master.js",
     "quakejs-repak": "bin/repak.js"
   },
-  "author": "Anthony Pesch",
-  "license": "MIT",
-  "readmeFilename": "README.md",
   "dependencies": {
     "async": "~0.2.9",
     "buffer-crc32": "~0.2.1",
     "ejs": "~0.8.4",
     "execSync": "~1.0.1-pre",
     "express": "~3.3.5",
+    "http-proxy": "^1.18.1",
     "optimist": "~0.6.0",
     "quakejs-files": "0.0.3",
     "send": "^0.16.2",

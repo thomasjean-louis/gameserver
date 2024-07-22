@@ -1,4 +1,4 @@
 {
-    "key": "/etc/letsencrypt/live/quakejs.com/privkey.pem",
+    "key": "default.pem",
     "cert": "/etc/letsencrypt/live/quakejs.com/fullchain.pem"
 }
