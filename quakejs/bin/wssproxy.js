@@ -25,7 +25,7 @@ var config = loadConfig(argv.config);
 function loadConfig(configPath) {
     var config = {
         listenPort: 27961,
-        proxyAddr: 'localhost',
+        proxyAddr: '10.0.2.216',
         proxyPort: 27960,
         key: "default privatekey",
         cert: "default certificate"
