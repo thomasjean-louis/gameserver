@@ -1,6 +1,6 @@
 var path = require('path');
 var fs = require('fs'); 
-var gms = 'https://svr2:3443';
+var gms = 'http://54.167.195.212:27960';
 
 var express = require('express');
 var app = express();
