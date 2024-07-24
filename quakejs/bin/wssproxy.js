@@ -38,8 +38,8 @@ function loadConfig(configPath) {
         // _.extend(config, data);
         config.key = data.key;
         config.cert = data.cert;
-        console.log('key '+  data.key);
         console.log('key '+  config.key);
+        console.log('cert '+  config.cert);
     } catch (e) {
         logger.warn('failed to load config', e);
     }
@@ -47,12 +47,16 @@ function loadConfig(configPath) {
     return config;
 }
 
+// Using self-signed certificate
 var proxy = new httpProxy.createProxyServer({
+    secure : false,
     target: {
         host: config.proxyAddr,
         port: config.proxyPort
     }
 });
+
+
 
 const opts = {
     key: fs.readFileSync(config.key),
@@ -65,6 +69,52 @@ var proxyServer = https.createServer(opts, function (req, res) {
 proxyServer.on('upgrade', function (req, socket, head) {
     proxy.ws(req, socket, head);
 });
+
+proxy.on('error', function (err, req, res) {
+    console.log(err);
+    try {
+     res.writeHead(500, {
+      'Content-Type': 'text/plain'
+     });
+     res.end('Error: ' + err.message);
+    } catch(err) {
+     console.log(err);
+    }
+   });
+    
+
+proxyServer.on('error', function (err, req, res) {
+    console.log('error message');
+    console.log(err);
+    try {
+     res.writeHead(500, {
+      'Content-Type': 'text/plain'
+     });
+     res.end('Error: ' + err.message);
+    } catch(err) {
+     console.log(err);
+    }
+   });
+
+proxyServer.on('proxyRes', function (proxyRes, req, res) {
+    console.log('proxyRes message');
+
+console.log('RAW Response from the target', JSON.stringify(proxyRes.headers, true, 2));
+});
+
+proxyServer.on('open', function (proxySocket) {
+    console.log('open message');
+
+    // listen for messages coming FROM the target here
+    proxySocket.on('data', hybiParseAndLogMessage);
+  });
+
+  proxyServer.on('close', function (res, socket, head) {
+    console.log('close message');
+
+    // view disconnected websocket connections
+    console.log('Client disconnected');
+  });
 
 proxyServer.listen(config.listenPort, '0.0.0.0',  function() {
     
