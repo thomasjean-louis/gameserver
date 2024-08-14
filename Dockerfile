@@ -12,7 +12,9 @@ RUN apt-get install  curl -y
 RUN apt-get install  npm -y
 RUN apt-get install  jq -y
 RUN apt-get install  apache2 -y
+RUN apt-get install  openssl -y
 RUN apt-get install  apt-utils -y
+
 
 
 #RUN curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
