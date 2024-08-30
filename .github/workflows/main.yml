@@ -11,27 +11,36 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-3
 
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          push: true
-          tags: thomasjeanlouis1/gameserver:${{ github.ref_name }}_${{ github.run_number }}
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push the image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPO_NAME }}
+          IMAGE_TAG: ${{ github.ref_name }}_${{ github.run_number }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       # Update gameserver docker image tag
-      # - run: >
-      #     curl -L
-      #     -X PATCH
-      #     -H "Accept: application/vnd.github+json"
-      #     -H "Authorization: Bearer ${{ secrets.TOKEN_GITHUB }}"
-      #     -H "X-GitHub-Api-Version: 2022-11-28"
-      #     https://api.github.com/repos/thomasjean-louis/infra/environments/${{ github.ref_name }}/variables/GAME_SERVER_DOCKER_IMAGE
-      #     -d '{"name":"GAME_SERVER_DOCKER_IMAGE","value":"${{ github.ref_name }}_${{ github.run_number }}"}'
+      - run: >
+          curl -L
+          -X PATCH
+          -H "Accept: application/vnd.github+json"
+          -H "Authorization: Bearer ${{ secrets.TOKEN_GITHUB }}"
+          -H "X-GitHub-Api-Version: 2022-11-28"
+          https://api.github.com/repos/thomasjean-louis/infra/environments/${{ github.ref_name }}/variables/GAME_SERVER_TAG
+          -d '{"name":"GAME_SERVER_TAG","value":"${{ github.ref_name }}_${{ github.run_number }}"}'
 
       # Launch infra workflow, to update image used
       # - run: >
