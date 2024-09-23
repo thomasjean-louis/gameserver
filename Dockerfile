@@ -15,13 +15,11 @@ RUN apt-get install  apache2 -y
 RUN apt-get install  apt-utils -y
 
 
-#RUN curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 COPY ./setup_12.x setup_12.x
 RUN sudo -E bash -
 
 COPY ./quakejs /quakejs
 
-#RUN git clone https://github.com/nerosketch/quakejs.git
 
 WORKDIR /quakejs
 RUN npm install
