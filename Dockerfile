@@ -1,22 +1,17 @@
-FROM ubuntu:20.04
+FROM node:18-alpine as build
 
-ARG DEBIAN_FRONTEND=noninteractive
-ENV TZ=US/Eastern
+RUN apk --no-cache --no-check-certificate update
+RUN apk --no-cache --no-check-certificate upgrade
+RUN apk --no-cache --no-check-certificate add jq
+RUN apk --no-cache --no-check-certificate add apache2
+RUN apk --no-cache --no-check-certificate add curl
 
-RUN apt-get update
-RUN apt-get upgrade -y
-
-#RUN apt-get install -y wget 
-RUN apt-get install  sudo -y
-RUN apt-get install  curl -y
-RUN apt-get install  npm -y
-RUN apt-get install  jq -y
-RUN apt-get install  apache2 -y
-RUN apt-get install  apt-utils -y
+RUN mkdir -p /run/apache2
+# RUN exec /usr/sbin/httpd -D FOREGROUND
+# CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
 
 
 COPY ./setup_12.x setup_12.x
-RUN sudo -E bash -
 
 COPY ./quakejs /quakejs
 
@@ -26,18 +21,16 @@ RUN npm install
 RUN ls
 COPY server.cfg /quakejs/base/baseq3/server.cfg
 COPY server.cfg /quakejs/base/cpma/server.cfg
-# The two following lines are not necessary because we copy assets from include.  Leaving them here for continuity.
-# WORKDIR /var/www/html
-# RUN bash /var/www/html/get_assets.sh
+
 COPY ./include/ioq3ded/ioq3ded.fixed.js /quakejs/build/ioq3ded.js
 
-RUN rm /var/www/html/index.html && cp /quakejs/html/* /var/www/html/
-COPY ./include/assets/ /var/www/html/assets
-RUN ls /var/www/html
+RUN ls /var/www/localhost/htdocs
+RUN rm /var/www/localhost/htdocs/index.html && cp /quakejs/html/* /var/www/localhost/htdocs/
+COPY ./include/assets/ /var/www/localhost/htdocs/assets
+
 
 WORKDIR /
 ADD entrypoint.sh /entrypoint.sh
-# Was having issues with Linux and Windows compatibility with chmod -x, but this seems to work in both
 RUN chmod 777 ./entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
