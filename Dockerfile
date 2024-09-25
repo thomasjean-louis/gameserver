@@ -7,8 +7,6 @@ RUN apk --no-cache --no-check-certificate add apache2
 RUN apk --no-cache --no-check-certificate add curl
 
 RUN mkdir -p /run/apache2
-# RUN exec /usr/sbin/httpd -D FOREGROUND
-# CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
 
 
 COPY ./setup_12.x setup_12.x
