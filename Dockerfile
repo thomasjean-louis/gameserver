@@ -1,6 +1,7 @@
 FROM node:18-alpine as build
 
-RUN apk --no-cache --no-check-certificate update jq apache2 curl
+RUN apk --no-cache --no-check-certificate update upgrade 
+RUN apk --no-cache --no-check-certificate add jq apache2 curl
 
 RUN mkdir -p /run/apache2
 
