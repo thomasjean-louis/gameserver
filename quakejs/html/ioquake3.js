@@ -15275,6 +15275,7 @@ function copyTempDouble(ptr) {
   			var com_basegame = Pointer_stringify(_Cvar_VariableString(allocate(intArrayFromString('com_basegame'), 'i8', ALLOC_STACK)));
   			var mapname = Pointer_stringify(_Cvar_VariableString(allocate(intArrayFromString('mapname'), 'i8', ALLOC_STACK)));
   			var url = 'http://' + fs_cdn + '/assets/manifest.json';
+        // var url = "file:///assets/manifest.json";
   
   			function isInstaller(name) {
   				return SYSC.installers.some(function (installer) {
