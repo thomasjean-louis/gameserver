@@ -8,7 +8,6 @@ sed -i "s/'game_server/'${GAME_SERVER}/g" index.html
 
 sed -i "s/':80'/':${HTTP_PORT}'/g" index.html
 
-
 echo starting apache server
 /usr/sbin/httpd 
 
