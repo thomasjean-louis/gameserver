@@ -1,7 +1,7 @@
 # Gameserver
 Repository used to build the game server Docker image.
 
-## Orchestration
+## CI/CD
 At each commit, a Docker image is built and deployed in a dedicated aws ECR repository, with a unique tag. 
 The [terraform demo project](https://github.com/thomasjean-louis/infra) is deployed once again, to update the docker image defined in the ECS task definition.
 
